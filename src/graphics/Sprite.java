@@ -9,9 +9,9 @@ public class Sprite {
 	public int[] pixels;
 	private SpriteSheet sheet;
 
-	public static Sprite voidSprite = new Sprite(1000, 1000, 0xFFFF00FF);
-	public static Sprite markO = new Sprite(500, 500, 0, 0, SpriteSheet.marks);
-	public static Sprite markX = new Sprite(500, 500, 1, 0, SpriteSheet.marks);
+	public static Sprite voidSprite = new Sprite(250, 250, 0xFFFF00FF);
+	public static Sprite markO = new Sprite(250, 250, 0, 0, SpriteSheet.marks);
+	public static Sprite markX = new Sprite(250, 250, 1, 0, SpriteSheet.marks);
 
 	/**
 	 * Creates a sprite from a sprite sheet
@@ -65,9 +65,9 @@ public class Sprite {
 	private int[] resizeSprite(Sprite sprite, int sizex, int sizey) {
 		int[] data = getData(sprite);
 		int[] newData = new int[sizex * sizey * 4];
-		double scalex = (double) sizex / (double) sprite.SIZE_X;
-		double scaley = (double) sizey / (double) sprite.SIZE_Y;
-		System.out.println("scalex: "+scalex+", scaley: "+scaley);
+		float scalex = (float) sizex / (float) sprite.SIZE_X;
+		float scaley = (float) sizey / (float) sprite.SIZE_Y;
+		System.out.println("scalex: " + scalex + ", scaley: " + scaley);
 		for (int y = 0; y < sprite.SIZE_Y * scaley; y++)
 			for (int x = 0; x < sprite.SIZE_X * scalex; x++) {
 				int pxl = y * sizex * 4 + x * 4;

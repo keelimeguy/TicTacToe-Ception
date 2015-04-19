@@ -7,20 +7,26 @@ import input.Mouse;
 
 public class Cell {
 
-	protected int size, x, y, clicks;
+	protected int size, x, y, clicks, col, row;
 	protected boolean clickable, clicked;
 	protected Sprite sprite;
-	protected Board board;
-	protected Sprite mark;
+	protected Board board, parent;
+	protected Level level;
+	protected Sprite mark, empty;
 
-	public Cell(int size, int x, int y, int layers) {
+	public Cell(int size, int x, int y, int layers, Level level, Board parent, int col, int row) {
 		this.size = size;
 		this.x = x;
 		this.y = y;
+		this.parent = parent;
+		this.col = col;
+		this.row = row;
+		this.level = level;
 		clickable = false;
 		clicked = false;
 		clicks = 0;
-		mark = new Sprite(size, size, Sprite.voidSprite);
+		empty = new Sprite(size, size, Sprite.voidSprite);
+		mark = empty;
 		if (layers == 1)
 			sprite = new Sprite(size, size, 0xFF1b87e0);
 		else if (layers == 2)
@@ -32,7 +38,7 @@ public class Cell {
 			clickable = true;
 		}
 		if (layers > 0)
-			board = new Board(size, x, y, layers);
+			board = new Board(size, x, y, layers, level, this);
 		else
 			board = null;
 	}
@@ -42,19 +48,26 @@ public class Cell {
 	}
 
 	public void update(int width, int height, Player player, Screen screen) {
-		if (Mouse.getX() > (int) (x * width / screen.width) && Mouse.getX() < (int) ((x + size) * width / screen.width) && Mouse.getY() > (int) (y * height / screen.height) && Mouse.getY() < (int) ((y + size) * height / screen.height)) {
-			if (Mouse.getB() == 1 && clickable && !clicked) {
+		if (clickable) if (Mouse.getX() > (int) (x * width / screen.width) && Mouse.getX() < (int) ((x + size) * width / screen.width) && Mouse.getY() > (int) (y * height / screen.height) && Mouse.getY() < (int) ((y + size) * height / screen.height)) {
+			mark = new Sprite(size, size, player.getHoverMark());
+			if (Mouse.getB() == 1 && !clicked) {
 				clicked = true;
 				clicks++;
 				if (clicks >= 1) {
-					System.out.println(size);
 					mark = new Sprite(size, size, player.getMark());
+					mark(col, row, player.getMarkValue());
 					clickable = false;
 				}
 			}
-		}
+		} else
+			mark = empty;
+
 		if (Mouse.getB() == -1) clicked = false;
 		if (board != null) board.update(width, height, player, screen);
+	}
+
+	public void mark(int c, int r, int value) {
+		parent.mark(c, r, value);
 	}
 
 	public void render(Screen screen) {

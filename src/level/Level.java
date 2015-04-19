@@ -5,7 +5,7 @@ import graphics.Screen;
 
 public class Level {
 
-	protected int width, height, layers, curPlayer;
+	protected int width, height, layers, curPlayer, numPlayers;
 	protected Player[] player;
 	protected Board board;
 
@@ -16,11 +16,20 @@ public class Level {
 		this.height = height;
 		this.layers = layers;
 		this.player = player;
-		curPlayer = 2;
+		numPlayers = player.length;
+		curPlayer = 1;
 
 		int size = height;
 		if (height > width) size = width;
-		board = new Board(size, (width - size) / 2, (height - size) / 2, layers);
+		board = new Board(size, (width - size) / 2, (height - size) / 2, layers, this, null);
+	}
+
+	public void nextPlayer() {
+		if (++curPlayer > numPlayers) curPlayer = 1;
+	}
+
+	public void win(int value) {
+		System.out.println("Player " + value + "wins!");
 	}
 
 	public void update(int width, int height, Screen screen) {

@@ -47,10 +47,10 @@ public class Game extends Canvas implements Runnable {
 		key = new Keyboard();
 
 		player = new Player[2];
-		player[0] = new Player(Sprite.markX);
-		player[1] = new Player(Sprite.markO, 0xFFFF0000);
+		player[0] = new Player(1, Sprite.markX, 0xFF00FF00, 0xFFFF0000);
+		player[1] = new Player(2, Sprite.markO, 0xFF0000FF, 0xFFFF0000);
 
-		//level = new Level(width, height, 2, player);
+		level = new Level(width, height, 1, player);
 		screen = new Screen(width, height);
 
 		addKeyListener(key);
@@ -65,7 +65,7 @@ public class Game extends Canvas implements Runnable {
 	 * @return The width as an int value
 	 */
 	public static int getWindowWidth() {
-		return frame.getWidth();
+		return frame.getContentPane().getWidth();
 	}
 
 	/**
@@ -73,7 +73,7 @@ public class Game extends Canvas implements Runnable {
 	 * @return The height as an int value
 	 */
 	public static int getWindowHeight() {
-		return frame.getHeight();
+		return frame.getContentPane().getHeight();
 	}
 
 	/**
@@ -143,7 +143,7 @@ public class Game extends Canvas implements Runnable {
 	 */
 	public void update() {
 		key.update();
-		//level.update(getWindowWidth(), getWindowHeight(), screen);
+		level.update(getWindowWidth(), getWindowHeight(), screen);
 	}
 
 	public void update(Graphics g) {
@@ -157,11 +157,11 @@ public class Game extends Canvas implements Runnable {
 
 		Screen scrn = new Screen(width, height);
 
-		scrn.clear(0xFFFFFFFF);
+		scrn.clear(0);
 
 		// Render the level
-		//level.render(scrn);
-		scrn.renderSprite(0,0, new Sprite(36,36,Sprite.markO));
+		level.render(scrn);
+
 		// Copy the screen pixels to the image to be drawn
 		System.arraycopy(scrn.pixels, 0, screen.pixels, 0, screen.pixels.length);
 		System.arraycopy(screen.pixels, 0, pixels, 0, pixels.length);

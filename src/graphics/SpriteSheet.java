@@ -11,7 +11,7 @@ public class SpriteSheet {
 	public final int SIZE;
 	public int[] pixels;
 
-	public static SpriteSheet marks = new SpriteSheet("/marks.png", 1000);
+	public static SpriteSheet marks = new SpriteSheet("/marks.png", 500);
 	
 	/**
 	 * Creates a sprite sheet from a resource path
