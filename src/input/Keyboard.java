@@ -16,11 +16,11 @@ public class Keyboard implements KeyListener {
 	}
 
 	public void keyPressed(KeyEvent e) {
-		keys[e.getKeyCode()] = true;
+		if (e.getKeyCode() < keys.length) keys[e.getKeyCode()] = true;
 	}
 
 	public void keyReleased(KeyEvent e) {
-		keys[e.getKeyCode()] = false;
+		if (e.getKeyCode() < keys.length) keys[e.getKeyCode()] = false;
 	}
 
 	public void keyTyped(KeyEvent e) {

@@ -67,7 +67,8 @@ public class Sprite {
 		int[] newData = new int[sizex * sizey * 4];
 		float scalex = (float) sizex / (float) sprite.SIZE_X;
 		float scaley = (float) sizey / (float) sprite.SIZE_Y;
-		System.out.println("scalex: " + scalex + ", scaley: " + scaley);
+		//System.out.println("Scale: "+scalex);
+		
 		for (int y = 0; y < sprite.SIZE_Y * scaley; y++)
 			for (int x = 0; x < sprite.SIZE_X * scalex; x++) {
 				int pxl = y * sizex * 4 + x * 4;

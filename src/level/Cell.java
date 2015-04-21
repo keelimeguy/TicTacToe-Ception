@@ -38,7 +38,7 @@ public class Cell {
 			clickable = true;
 		}
 		if (layers > 0)
-			board = new Board(size, x, y, layers, level, this);
+			board = new Board(size, x, y, layers, level, col, row, this);
 		else
 			board = null;
 	}
@@ -48,26 +48,27 @@ public class Cell {
 	}
 
 	public void update(int width, int height, Player player, Screen screen) {
-		if (clickable) if (Mouse.getX() > (int) (x * width / screen.width) && Mouse.getX() < (int) ((x + size) * width / screen.width) && Mouse.getY() > (int) (y * height / screen.height) && Mouse.getY() < (int) ((y + size) * height / screen.height)) {
-			mark = new Sprite(size, size, player.getHoverMark());
-			if (Mouse.getB() == 1 && !clicked) {
-				clicked = true;
-				clicks++;
-				if (clicks >= 1) {
-					mark = new Sprite(size, size, player.getMark());
-					mark(col, row, player.getMarkValue());
-					clickable = false;
+		if (clickable && (level.getCurX() == parent.getCol() && level.getCurY() == parent.getRow() || level.getCurX() == -1)) {
+			if (Mouse.getX() > (int) (x * width / screen.width) && Mouse.getX() < (int) ((x + size) * width / screen.width) && Mouse.getY() > (int) (y * height / screen.height) && Mouse.getY() < (int) ((y + size) * height / screen.height)) {
+				mark = new Sprite(size, size, player.getHoverMark());
+				if (Mouse.getB() == 1 && !clicked) {
+					clicked = true;
+					clicks++;
+					if (clicks >= 1) {
+						mark = new Sprite(size, size, player.getMark());
+						mark(col, row, player.getMarkValue(), true);
+						clickable = false;
+					}
 				}
-			}
-		} else
-			mark = empty;
-
+			} else
+				mark = empty;
+		}
 		if (Mouse.getB() == -1) clicked = false;
 		if (board != null) board.update(width, height, player, screen);
 	}
 
-	public void mark(int c, int r, int value) {
-		parent.mark(c, r, value);
+	public void mark(int c, int r, int value, boolean next) {
+		parent.mark(c, r, value, next);
 	}
 
 	public void render(Screen screen) {
