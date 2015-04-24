@@ -33,9 +33,12 @@ public class Board {
 
 	public void mark(int c, int r, int value, boolean next) {
 		if (c >= 3 || r >= 3) return;
-		marks[c + r * 3] = value;
-		if (next) level.nextPlayer();
-		checkWin(c, r, value);
+		if (marks[c + r * 3] == -1) {
+			marks[c + r * 3] = value;
+			
+			if (next) level.nextPlayer();
+			checkWin(c, r, value);
+		} else if (next) level.nextPlayer();
 	}
 
 	public void update(int width, int height, Player player, Screen screen) {
@@ -60,16 +63,16 @@ public class Board {
 
 	public void checkWin(int x, int y, int value) {
 		boolean win = false;
-
+		
 		if (marks[0] != -1 && marks[0] == marks[4] && marks[4] == marks[8]) win = true;
 		if (marks[2] != -1 && marks[2] == marks[4] && marks[4] == marks[6]) win = true;
 		if (marks[x] == marks[x + 3] && marks[x] == marks[x + 6]) win = true;
 		if (marks[y * 3] == marks[1 + y * 3] && marks[y * 3] == marks[2 + y * 3]) win = true;
-
+		
 		if (parent != null && win)
 			parent.mark(col, row, value, false);
 		else if (win) level.win(value);
-		
+
 		level.move(x, y);
 	}
 }

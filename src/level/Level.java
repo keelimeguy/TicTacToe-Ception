@@ -10,7 +10,7 @@ public class Level {
 	protected Board board;
 
 	public Level(int width, int height, int layers, Player[] player) {
-		//if (layers > 4) layers = 4;
+		if (layers > 4) layers = 4;
 		if (layers < 1) layers = 1;
 		this.width = width;
 		this.height = height;
@@ -26,8 +26,10 @@ public class Level {
 	}
 
 	public void move(int x, int y) {
-		curX = x;
-		curY = y;
+		if (layers != 1) {
+			curX = x;
+			curY = y;
+		}
 	}
 
 	public int getCurX() {

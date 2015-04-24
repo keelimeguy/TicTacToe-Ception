@@ -7,9 +7,9 @@ import input.Mouse;
 
 public class Cell {
 
-	protected int size, x, y, clicks, col, row;
+	protected int size, x, y, clicks, col, row, layer;
 	protected boolean clickable, clicked;
-	protected Sprite sprite;
+	protected Sprite sprite, dark, cpySprite;
 	protected Board board, parent;
 	protected Level level;
 	protected Sprite mark, empty;
@@ -22,6 +22,9 @@ public class Cell {
 		this.col = col;
 		this.row = row;
 		this.level = level;
+		this.layer = layers;
+		dark = null;
+		cpySprite = null;
 		clickable = false;
 		clicked = false;
 		clicks = 0;
@@ -30,11 +33,14 @@ public class Cell {
 		if (layers == 1)
 			sprite = new Sprite(size, size, 0xFF1b87e0);
 		else if (layers == 2)
-			sprite = new Sprite(size, size, 0xFF00FF00);
+			sprite = new Sprite(size, size, 0xFF22FF22);
 		else if (layers == 3)
 			sprite = new Sprite(size, size, 0xFFFFFF00);
 		else {
 			sprite = new Sprite(size, size, 0xFFFFFFFF);
+			cpySprite = new Sprite(size, size, 0xFFFFFFFF);
+			dark = new Sprite(size, size, 0xFFFFFFFF);
+			dark.darker();
 			clickable = true;
 		}
 		if (layers > 0)
@@ -48,8 +54,13 @@ public class Cell {
 	}
 
 	public void update(int width, int height, Player player, Screen screen) {
-		if (clickable && (level.getCurX() == parent.getCol() && level.getCurY() == parent.getRow() || level.getCurX() == -1)) {
-			if (Mouse.getX() > (int) (x * width / screen.width) && Mouse.getX() < (int) ((x + size) * width / screen.width) && Mouse.getY() > (int) (y * height / screen.height) && Mouse.getY() < (int) ((y + size) * height / screen.height)) {
+		player = new Player(player);
+		if (layer >= 3) {
+			player = new Player(player.getMarkValue(), new Sprite(5, 5, 0xFF000000), player.getColor(), player.getHoverColor());
+		}
+		if (level.getCurX() == parent.getCol() && level.getCurY() == parent.getRow() || level.getCurX() == -1) {
+			if (cpySprite != null && level.getCurX() != -1) sprite = cpySprite;
+			if (clickable) if (Mouse.getX() > (int) (x * width / screen.width) && Mouse.getX() < (int) ((x + size) * width / screen.width) && Mouse.getY() > (int) (y * height / screen.height) && Mouse.getY() < (int) ((y + size) * height / screen.height)) {
 				mark = new Sprite(size, size, player.getHoverMark());
 				if (Mouse.getB() == 1 && !clicked) {
 					clicked = true;
@@ -62,7 +73,7 @@ public class Cell {
 				}
 			} else
 				mark = empty;
-		}
+		} else if (dark != null) sprite = dark;
 		if (Mouse.getB() == -1) clicked = false;
 		if (board != null) board.update(width, height, player, screen);
 	}
@@ -75,7 +86,8 @@ public class Cell {
 		screen.renderCell(x, y, this);
 		if (board != null)
 			board.render(screen);
-		else
+		else {
 			screen.renderSprite(x, y, mark);
+		}
 	}
 }

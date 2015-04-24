@@ -49,7 +49,7 @@ public class Game extends Canvas implements Runnable {
 		key = new Keyboard();
 
 		player = new Player[2];
-		player[0] = new Player(1, Sprite.markX, 0xFF00FF00, 0xFFFF0000);
+		player[0] = new Player(1, Sprite.markX, 0xFF000000, 0xFFFF0000);
 		player[1] = new Player(2, Sprite.markO, 0xFF0000FF, 0xFFFF0000);
 
 		level = new Level(width, height, 2, player);
@@ -168,12 +168,13 @@ public class Game extends Canvas implements Runnable {
 		System.arraycopy(scrn.pixels, 0, screen.pixels, 0, screen.pixels.length);
 		System.arraycopy(screen.pixels, 0, pixels, 0, pixels.length);
 
+		/*
 		Graphics gi = image.getGraphics();
 		gi.setColor(Color.RED);
 		gi.setFont(new Font(Font.SERIF, 20, 20));
 		gi.drawString("Cur Board: (" + level.getCurX() + " , " + level.getCurY() + ")", 0, 20);
 		gi.dispose();
-		
+		*/
 		g.drawImage(image, 0, 0, getWidth(), getHeight(), null);
 		g.dispose();
 	}

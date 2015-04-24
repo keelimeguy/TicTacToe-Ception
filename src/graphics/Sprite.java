@@ -68,7 +68,7 @@ public class Sprite {
 		float scalex = (float) sizex / (float) sprite.SIZE_X;
 		float scaley = (float) sizey / (float) sprite.SIZE_Y;
 		//System.out.println("Scale: "+scalex);
-		
+
 		for (int y = 0; y < sprite.SIZE_Y * scaley; y++)
 			for (int x = 0; x < sprite.SIZE_X * scalex; x++) {
 				int pxl = y * sizex * 4 + x * 4;
@@ -123,6 +123,22 @@ public class Sprite {
 		for (int y = 0; y < SIZE_Y; y++) {
 			for (int x = 0; x < SIZE_X; x++) {
 				pixels[x + y * SIZE_X] = sheet.pixels[(x + this.x) + (y + this.y) * sheet.SIZE];
+			}
+		}
+	}
+	
+	public void darker() {
+		for (int y = 0; y < SIZE_Y; y++) {
+			for (int x = 0; x < SIZE_X; x++) {
+				pixels[x + y * SIZE_X] = new Color(pixels[x + y * SIZE_X]).darker().hashCode();
+			}
+		}
+	}
+
+	public void brighter() {
+		for (int y = 0; y < SIZE_Y; y++) {
+			for (int x = 0; x < SIZE_X; x++) {
+				pixels[x + y * SIZE_X] = new Color(pixels[x + y * SIZE_X]).brighter().hashCode();
 			}
 		}
 	}
