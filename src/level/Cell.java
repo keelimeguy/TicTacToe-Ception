@@ -83,6 +83,7 @@ public class Cell {
 	}
 
 	public void render(Screen screen) {
+		if (level.getWin() != 0 && cpySprite != null) sprite = cpySprite;
 		screen.renderCell(x, y, this);
 		if (board != null)
 			board.render(screen);

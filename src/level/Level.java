@@ -5,7 +5,7 @@ import graphics.Screen;
 
 public class Level {
 
-	protected int width, height, layers, curPlayer, numPlayers, curX, curY;
+	protected int width, height, layers, curPlayer, numPlayers, curX, curY, win;
 	protected Player[] player;
 	protected Board board;
 
@@ -18,6 +18,7 @@ public class Level {
 		this.player = player;
 		numPlayers = player.length;
 		curPlayer = 1;
+		win = 0;
 		curX = curY = -1;
 
 		int size = height;
@@ -45,15 +46,19 @@ public class Level {
 	}
 
 	public void win(int value) {
-		System.out.println("Player " + value + " wins!");
+		win = value;
 	}
 
 	public void update(int width, int height, Screen screen) {
-		board.update(width, height, player[curPlayer - 1], screen);
+		if (win == 0) board.update(width, height, player[curPlayer - 1], screen);
 	}
 
 	public void render(Screen screen) {
 		board.render(screen);
+	}
+
+	public int getWin() {
+		return win;
 	}
 
 }

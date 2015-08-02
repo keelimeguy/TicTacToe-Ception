@@ -13,14 +13,17 @@ import java.awt.image.BufferedImage;
 import java.awt.image.DataBufferInt;
 
 import javax.swing.JFrame;
+import javax.swing.JOptionPane;
 
 import level.Level;
 
 public class Game extends Canvas implements Runnable {
 	private static final long serialVersionUID = 1L;
 
-	public static int width = 500;
-	public static int height = width / 3 * 2;
+	private static boolean app = true;
+
+	public static int width = 500, appletWidth;
+	public static int height = width / 3 * 2, appletHeight;
 	public static int scale = 2; // The game will be scaled up by this factor, so the actual window width and height will be the above values times this value
 	public static String title = "TicTacToe-Ception";
 
@@ -62,12 +65,37 @@ public class Game extends Canvas implements Runnable {
 		addMouseMotionListener(mouse);
 	}
 
+	public Game(int layers) {
+
+		Dimension size = new Dimension(width * scale, height * scale);
+		setPreferredSize(size);
+
+		frame = new JFrame();
+		key = new Keyboard();
+
+		player = new Player[2];
+		player[0] = new Player(1, Sprite.markX, 0xFF000000, 0xFFFF0000);
+		player[1] = new Player(2, Sprite.markO, 0xFF0000FF, 0xFFFF0000);
+
+		level = new Level(width, height, layers, player);
+		screen = new Screen(width, height);
+
+		addKeyListener(key);
+
+		Mouse mouse = new Mouse();
+		addMouseListener(mouse);
+		addMouseMotionListener(mouse);
+	}
+
 	/**
 	 * Returns the height of the window with scaling.
 	 * @return The width as an int value
 	 */
 	public static int getWindowWidth() {
-		return frame.getContentPane().getWidth();
+		if (!app)
+			return frame.getContentPane().getWidth();
+		else
+			return appletWidth;
 	}
 
 	/**
@@ -75,15 +103,21 @@ public class Game extends Canvas implements Runnable {
 	 * @return The height as an int value
 	 */
 	public static int getWindowHeight() {
-		return frame.getContentPane().getHeight();
+		if (!app)
+			return frame.getContentPane().getHeight();
+		else
+			return appletHeight;
 	}
 
 	/**
 	 * Starts the game thread
 	 */
-	public synchronized void start() {
+	public synchronized void start(int awidth, int aheight) {
+		if (running) return;
+		appletWidth = awidth;
+		appletHeight = aheight;
 		running = true;
-		thread = new Thread(this, "Display");
+		thread = new Thread(this);
 		createBufferStrategy(3);
 		thread.start();
 	}
@@ -92,11 +126,15 @@ public class Game extends Canvas implements Runnable {
 	 * Stops the game thread
 	 */
 	public synchronized void stop() {
+		if (!running) {
+			return;
+		}
 		running = false;
 		try {
 			thread.join();
-		} catch (InterruptedException e) {
+		} catch (Exception e) {
 			e.printStackTrace();
+			System.exit(0);
 		}
 	}
 
@@ -168,13 +206,20 @@ public class Game extends Canvas implements Runnable {
 		System.arraycopy(scrn.pixels, 0, screen.pixels, 0, screen.pixels.length);
 		System.arraycopy(screen.pixels, 0, pixels, 0, pixels.length);
 
-		/*
 		Graphics gi = image.getGraphics();
 		gi.setColor(Color.RED);
-		gi.setFont(new Font(Font.SERIF, 20, 20));
-		gi.drawString("Cur Board: (" + level.getCurX() + " , " + level.getCurY() + ")", 0, 20);
+		gi.setFont(new Font(Font.SERIF, 50, 50));
+		gi.drawString("Width: " + getWindowWidth() + "\nHeight: " + getWindowHeight(), 50, 50);
 		gi.dispose();
-		*/
+
+		if (level.getWin() != 0) {
+			Graphics gi1 = image.getGraphics();
+			gi1.setColor(Color.RED);
+			gi1.setFont(new Font(Font.SERIF, 50, 50));
+			gi1.drawString("Player " + level.getWin() + " wins!", width / 5 + 15, height / 2 + 10);
+			gi1.dispose();
+		}
+
 		g.drawImage(image, 0, 0, getWidth(), getHeight(), null);
 		g.dispose();
 	}
@@ -187,8 +232,13 @@ public class Game extends Canvas implements Runnable {
 
 		System.setProperty("sun.awt.noerasebackground", "true");
 
+		Object[] possibilities = { 1, 2, 3, 4 };
+		int layers = (int) JOptionPane.showInputDialog(frame, "How many layers?", "Board Setup", JOptionPane.QUESTION_MESSAGE, null, possibilities, 2);
+
+		app = false;
+
 		// Create the game
-		Game game = new Game();
+		Game game = new Game(layers);
 		game.frame.setResizable(true);
 		game.frame.setTitle(Game.title);
 		game.frame.add(game);
@@ -198,6 +248,6 @@ public class Game extends Canvas implements Runnable {
 		game.frame.setVisible(true);
 
 		// Start the game
-		game.start();
+		game.start(-1, -1);
 	}
 }
