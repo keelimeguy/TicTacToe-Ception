@@ -206,11 +206,11 @@ public class Game extends Canvas implements Runnable {
 		System.arraycopy(scrn.pixels, 0, screen.pixels, 0, screen.pixels.length);
 		System.arraycopy(screen.pixels, 0, pixels, 0, pixels.length);
 
-		Graphics gi = image.getGraphics();
+		/*Graphics gi = image.getGraphics();
 		gi.setColor(Color.RED);
 		gi.setFont(new Font(Font.SERIF, 50, 50));
 		gi.drawString("Width: " + getWindowWidth() + "\nHeight: " + getWindowHeight(), 50, 50);
-		gi.dispose();
+		gi.dispose();*/
 
 		if (level.getWin() != 0) {
 			Graphics gi1 = image.getGraphics();
