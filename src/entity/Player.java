@@ -1,7 +1,5 @@
 package entity;
 
-import java.awt.Color;
-
 import graphics.Sprite;
 
 public class Player {
@@ -52,8 +50,8 @@ public class Player {
 	public int getHoverColor() {
 		return hoverColor;
 	}
-	
-	public String toString(){
-		return "val:"+markValue;
+
+	public String toString() {
+		return "val:" + markValue;
 	}
 }

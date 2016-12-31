@@ -1,9 +1,3 @@
-import entity.Player;
-import graphics.Screen;
-import graphics.Sprite;
-import input.Keyboard;
-import input.Mouse;
-
 import java.awt.Canvas;
 import java.awt.Color;
 import java.awt.Dimension;
@@ -15,6 +9,11 @@ import java.awt.image.DataBufferInt;
 import javax.swing.JFrame;
 import javax.swing.JOptionPane;
 
+import entity.Player;
+import graphics.Screen;
+import graphics.Sprite;
+import input.Keyboard;
+import input.Mouse;
 import level.Level;
 
 public class Game extends Canvas implements Runnable {
@@ -239,13 +238,13 @@ public class Game extends Canvas implements Runnable {
 
 		// Create the game
 		Game game = new Game(layers);
-		game.frame.setResizable(true);
-		game.frame.setTitle(Game.title);
-		game.frame.add(game);
-		game.frame.pack();
-		game.frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		game.frame.setLocationRelativeTo(null);
-		game.frame.setVisible(true);
+		Game.frame.setResizable(true);
+		Game.frame.setTitle(Game.title);
+		Game.frame.add(game);
+		Game.frame.pack();
+		Game.frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		Game.frame.setLocationRelativeTo(null);
+		Game.frame.setVisible(true);
 
 		// Start the game
 		game.start(-1, -1);
